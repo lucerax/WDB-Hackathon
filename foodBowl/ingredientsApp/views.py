@@ -16,7 +16,7 @@ def recipeSearch(request, categoryID):
     Matches single category
     """
     allRecipes = Recipe.objects.all() #obtains all objects of class type recipe
-    #categoryObject = Category.objects.get(id = categoryID) #makes a query
+    categoryObject = Category.objects.get(id = categoryID) #makes a query
     payload = []
     listRecipes = []
 

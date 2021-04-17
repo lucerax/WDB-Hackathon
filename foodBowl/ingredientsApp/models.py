@@ -31,14 +31,14 @@ class Recipe(models.Model):
     Model class for a single recipe
     """
     directions = models.TextField()
-    fats = models.IntegerField(default=0)
+    fats = models.IntegerField(default=0, blank=True)
     categories = models.ManyToManyField('Category')
-    calories = models.IntegerField(default=0)
-    desc = models.TextField(default=None)
-    protein = models.IntegerField(default=0)
+    calories = models.IntegerField(default=0, blank=True)
+    desc = models.TextField(blank=True)
+    protein = models.IntegerField(default=0, blank=True)
     name = models.TextField(default="Nameless")
     ingredDetails = models.TextField(default=None)
-    sodium = models.IntegerField(default=0)
+    sodium = models.IntegerField(default=0, blank=True)
     
     def __str(self):
         return self.name

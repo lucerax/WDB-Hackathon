@@ -9,24 +9,42 @@ from ingredientsApp.models import Recipe, Category
 
 path_to_json = 'data/full_format_recipes.json'
 
+def get_id():
+    i = 0
+    while True:
+        yield i
+        i+=1
+        
+        
+a = get_id()
 
 with open(path_to_json, 'r') as f:
     data = json.load(f)
     for i, entry in enumerate(data):
-        #print(entry)
+        print(entry)
         r = Recipe(id=i)
-        print("ok")
-        
-        print("good")
         r.name = str(entry['title'])
-        r.desc = entry['desc']
+        r.desc = str(entry['desc'])
         r.directions = entry['directions']
-        r.fats = int(entry['fat'])
-        r.calories = int(entry['calories'])
-        r.protein = int(entry['protein'])
-        r.sodium = int(entry['sodium'])
+        if entry['fat']:
+            r.fats = entry['fat']
+        if entry['calories']:
+            r.calories = int(entry['calories']) 
+        
+        if entry['protein']:
+            r.protein = int(entry['protein'])  
+        
+        if entry['sodium']:
+            r.sodium = int(entry['sodium']) 
+
         r.ingredDetails = entry['ingredients']
+        r.save()
+
         for c in entry['categories']:
-            r.categories.create(name=str(c))
+            cat = Category(id = next(a))
+            #cat.save()
+            r.categories.add(i)
+
         print(i)
+        r.save()
 
