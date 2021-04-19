@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from .models import Category, Recipe
 import json
 from django.views.decorators.csrf import csrf_exempt
+import re
 
 def categoryView(request):
     allCategories = Category.objects.all()
@@ -21,21 +22,29 @@ def recipeSearch(request, categoryID):
     listRecipes = []
 
     for i, curRecipe in enumerate(allRecipes):
-      names = []
-      recipeCategories = curRecipe.categories.all() #gets all category tags for the recipe
-      
-      #TODO: possibly precompute these categories
-      for category in recipeCategories:
-        names.append(category.name)
+        names = []
+        recipeCategories = curRecipe.categories.all() #gets all category tags for the recipe
+        
+        #TODO: possibly precompute these categories
+        for category in recipeCategories:
+            names.append(category.name)
 
-      if set(payload).issubset(set(names)):
-        listRecipes.append({'name': curRecipe.name,
-        'ingredients': curRecipe.ingredDetails,  #list of details
-        'directions': curRecipe.directions, #list of steps
-        'calories': curRecipe.calories,
-        'protein': curRecipe.protein,
-        'fats': curRecipe.fats, 
-        'sodium': curRecipe.sodium})
+        #print("TYPE OF DIRS IS:", type(curRecipe.directions))
+        dirs = re.findall("'(.*?)'", curRecipe.directions)
+        #print(curRecipe.directions)
+        # for d in dirs:
+        #     print(d)
+
+        ingreds = re.findall("'(.*?)'", curRecipe.ingredDetails)
+
+        if set(payload).issubset(set(names)):
+            listRecipes.append({'name': curRecipe.name,
+            'ingredients': ingreds,  #list of details
+            'directions': dirs, #list of steps
+            'calories': curRecipe.calories,
+            'protein': curRecipe.protein,
+            'fats': curRecipe.fats, 
+            'sodium': curRecipe.sodium})
 
     return render(request, 'searchRecipe.html',
     {'categoryObject': categoryObject,

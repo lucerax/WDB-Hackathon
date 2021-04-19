@@ -41,6 +41,7 @@ with open(path_to_json, 'r') as f:
         r.save()
 
         for c in entry['categories']:
+            print(c)
             cat = Category(id = next(a))
             #cat.save()
             r.categories.add(i)
